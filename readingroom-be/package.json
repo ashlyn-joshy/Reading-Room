@@ -1,0 +1,15 @@
+{
+  "name": "readingroom-be",
+  "version": "1.0.0",
+  "description": "Reading room backed",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ashlyn Joshy",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0"
+  }
+}
