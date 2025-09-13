@@ -15,3 +15,13 @@ module.exports.createBadge = async (req, res) => {
         res.status(500).json({ error: 'Error creating badge', details: error.message });
     }
 }
+
+//Display All Badges
+module.exports.getAllBadges = async (req, res) => {
+    try {
+        const badges = await Badge.find();
+        res.status(200).json(badges);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching badges', details: error.message });
+    }
+}

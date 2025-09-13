@@ -5,6 +5,7 @@ var router = express.Router();
 const BadgeController = require('../controllers/badgeController');
 
 //routes
+router.get('/allbadges', BadgeController.getAllBadges);
 router.post('/', BadgeController.createBadge);
 
 module.exports = router;
