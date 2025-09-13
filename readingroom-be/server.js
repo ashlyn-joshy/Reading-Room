@@ -4,12 +4,21 @@ const mongoose = require("mongoose");
 
 const app = express();
 
-app.get("/", (req, res) => {
-  res.send(
-    "Hello World! This is a backend server for Reading Room application."
-  );
+//routers
+const badgeRouter = require('./routers/Badge');
+
+app.use(express.json());
+
+app.use((req, res, next) => {
+  console.log(`${req.method} :  ${req.path}`);
   next();
 });
+
+//routes
+app.get("/", (req, res) => {
+    res.json({message: "Hello World! This is a backend server for Reading Room application."});
+});
+app.use('/api/badges', badgeRouter);
 
 const port = process.env.PORT || 8000;
 

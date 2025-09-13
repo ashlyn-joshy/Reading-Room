@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const BadgeSchema = new Schema({
@@ -7,4 +7,4 @@ const BadgeSchema = new Schema({
     createdAt : { type: Date, default: Date.now }
 })
 
-export default mongoose.model('Badge', BadgeSchema);
+module.exports = mongoose.model('Badge', BadgeSchema);
