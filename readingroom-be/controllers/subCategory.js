@@ -43,3 +43,22 @@ module.exports.getSubCategoryById = async (req, res) => {
         res.status(500).json({ error: 'Error fetching sub-category', details: error.message });
     }
 }
+
+//update a specific sub-category
+module.exports.updateSubCategory = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const { name, description } = req.body;
+        // invalid id
+        if(!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ error: 'Invalid sub-category ID' });
+        }
+        const updateSubCategory = await SubCategory.findByIdAndUpdate(id, { name, description }, { new: true });
+        if(!updateSubCategory) {
+            return res.status(404).json({ error: 'Sub-category not found' });
+        }
+        res.status(200).json(updateSubCategory);
+    } catch (error) {
+        res.status(500).json({ error: 'Error updating sub-category', details: error.message });
+    }
+}
