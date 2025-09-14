@@ -6,5 +6,6 @@ const SubCategoryController = require('../controllers/subCategory');
 
 //routes
 router.post('/', SubCategoryController.createSubCategory);
+router.get('/', SubCategoryController.getAllSubCategories);
 
 module.exports = router;

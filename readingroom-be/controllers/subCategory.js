@@ -15,3 +15,13 @@ module.exports.createSubCategory = async (req, res) => {
         res.status(500).json({ error: 'Error creating sub-category', details: error.message });
     }
 }
+
+//show all the sub-categories
+module.exports.getAllSubCategories = async (req, res) => {
+    try {
+        const subCategories = await SubCategory.find();
+        res.status(200).json(subCategories);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching sub-categories', details: error.message });
+    }
+}
