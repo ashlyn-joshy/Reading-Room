@@ -7,6 +7,7 @@ const app = express();
 //routers
 const badgeRouter = require('./routers/Badge');
 const subCategoryRouter = require('./routers/SubCategory');
+const mainCategoryRouter = require('./routers/MainCategory');
 
 app.use(express.json());
 
@@ -21,6 +22,7 @@ app.get("/", (req, res) => {
 });
 app.use('/api/badges', badgeRouter);
 app.use('/api/subcategories', subCategoryRouter);
+app.use('/api/maincategories', mainCategoryRouter);
 
 const port = process.env.PORT || 8000;
 

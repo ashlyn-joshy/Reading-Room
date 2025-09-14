@@ -1,7 +1,7 @@
-import SubCategory from "./SubCategory";
-
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+
+const SubCategory = require("./SubCategory");
 
 const mainCategorySchema = new Schema({
     name: {type : String, required: true, unique: true},
