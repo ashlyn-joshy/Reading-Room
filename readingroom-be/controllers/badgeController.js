@@ -60,3 +60,21 @@ module.exports.getBadge = async (req, res) => {
         res.status(500).json({ error: 'Error fetching badge', details: error.message });
     }
 }
+
+//delete a badge
+module.exports.deleteBadge = async (req, res) => {
+    try {
+        const {id} = req.params;
+        //check if the id is valid
+        if(!mongoose.Types.ObjectId.isValid(id)){
+            return res.status(404).json({error: 'No such badge'});
+        }
+        const badge = await Badge.findByIdAndDelete(id);
+        if(!badge){
+            return res.status(404).json({error: 'No such badge'});
+        }
+        res.status(200).json(badge);
+    } catch (error) {
+        res.status(500).json({ error: 'Error deleting badge', details: error.message });
+    }
+}

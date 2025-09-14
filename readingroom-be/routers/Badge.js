@@ -9,5 +9,6 @@ router.get('/allbadges', BadgeController.getAllBadges);
 router.post('/', BadgeController.createBadge);
 router.put('/update/:id', BadgeController.updateBadge);
 router.get('/:id', BadgeController.getBadge);
+router.delete('/delete/:id', BadgeController.deleteBadge);
 
 module.exports = router;
