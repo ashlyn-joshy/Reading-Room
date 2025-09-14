@@ -25,3 +25,20 @@ module.exports.getAllBadges = async (req, res) => {
         res.status(500).json({ error: 'Error fetching badges', details: error.message });
     }
 }
+
+//update a badge info
+module.exports.updateBadge = async (req, res) => {
+    try {
+        const {id} = req.params;
+        //check if the id is valid
+        if(!mongoose.Types.ObjectId.isValid(id)){
+            return res.status(404).json({error: 'No such badge'});
+        }
+        const {name, description} = req.body;
+        //update the badge
+        const updateBadge = await Badge.findByIdAndUpdate(id, {name, description}, {new: true});
+        res.status(200).json(updateBadge);
+    } catch (error) {
+        res.status(500).json({ error: 'Error updating badge', details: error.message });
+    }
+}
