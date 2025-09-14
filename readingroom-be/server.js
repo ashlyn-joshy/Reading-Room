@@ -6,6 +6,7 @@ const app = express();
 
 //routers
 const badgeRouter = require('./routers/Badge');
+const subCategoryRouter = require('./routers/SubCategory');
 
 app.use(express.json());
 
@@ -19,6 +20,7 @@ app.get("/", (req, res) => {
     res.json({message: "Hello World! This is a backend server for Reading Room application."});
 });
 app.use('/api/badges', badgeRouter);
+app.use('/api/subcategories', subCategoryRouter);
 
 const port = process.env.PORT || 8000;
 
