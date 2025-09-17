@@ -115,3 +115,22 @@ module.exports.getMainCategoryDetails = async (req, res) => {
         res.status(500).json({ error: 'Error fetching main-category details', details: error.message });
     }
 }
+
+//update a main-category
+module.exports.updateMainCategory = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, description } = req.body;
+        //validate id
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ error: 'Invalid ID format' });
+        }
+        const mainCategory = await MainCategory.findByIdAndUpdate(id, { name, description }, { new: true }).populate('SubCategory');
+        if (!mainCategory) {
+            return res.status(404).json({ error: 'Main-category not found' });
+        }
+        res.status(200).json(mainCategory);
+    } catch (error) {
+        res.status(500).json({ error: 'Error updating main-category', details: error.message });
+    }
+}
