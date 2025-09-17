@@ -97,3 +97,21 @@ module.exports.deleteMainCategory = async (req, res) => {
         res.status(500).json({ error: 'Error deleting main-category', details: error.message });
     }
 }
+
+//get the details of a main-category along with its sub-categories
+module.exports.getMainCategoryDetails = async (req, res) => {
+    try {
+        const { id } = req.params;
+        //validate id
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ error: 'Invalid ID format' });
+        }
+        const mainCategory = await MainCategory.findById(id).populate('SubCategory');
+        if (!mainCategory) {
+            return res.status(404).json({ error: 'Main-category not found' });
+        }
+        res.status(200).json(mainCategory);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching main-category details', details: error.message });
+    }
+}
