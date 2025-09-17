@@ -46,6 +46,9 @@ module.exports.addSubCategoryToMainCategory = async (req, res) => {
             return res.status(404).json({ error: 'Sub-category not found' });
         }
         mainCategory.SubCategory.push(subCategoryId);
+        // Set the MainCategory reference in SubCategory
+        subCategory.MainCategory = id;
+        await subCategory.save();
         await mainCategory.save();
         res.status(200).json(mainCategory);
     } catch (error) {
