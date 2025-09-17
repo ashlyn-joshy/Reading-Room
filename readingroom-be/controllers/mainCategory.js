@@ -72,6 +72,15 @@ module.exports.removeSubCategoryFromMainCategory = async (req, res) => {
             return res.status(404).json({ error: 'Main-category not found' });
         }
         mainCategory.SubCategory = mainCategory.SubCategory.filter(subCatId => subCatId.toString() !== subCategoryId);
+
+        const subCategory = await SubCategory.findById(subCategoryId);
+        if (!subCategory) {
+            return res.status(404).json({ error: 'Sub-category not found' });
+        }
+        // Clear the MainCategory reference in SubCategory
+        subCategory.MainCategory = null;
+        await subCategory.save();
+        
         await mainCategory.save();
         res.status(200).json(mainCategory);
     } catch (error) {
