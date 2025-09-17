@@ -15,3 +15,13 @@ module.exports.createMainCategory = async (req, res) => {
         res.status(500).json({ error: 'Error creating main-category', details: error.message });
     }
 }
+
+//display all main-categories
+module.exports.getAllMainCategories = async (req, res) => {
+    try {
+        const mainCategories = await MainCategory.find().populate('SubCategory');
+        res.status(200).json(mainCategories);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching main-categories', details: error.message });
+    }
+}
