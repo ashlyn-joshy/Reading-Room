@@ -8,5 +8,6 @@ router.post('/', MainCategory.createMainCategory);
 router.get('/all', MainCategory.getAllMainCategories);
 router.put('/:id/addSubCategory', MainCategory.addSubCategoryToMainCategory);
 router.put('/:id/removeSubCategory', MainCategory.removeSubCategoryFromMainCategory);
+router.delete('/:id/delete', MainCategory.deleteMainCategory);
 
 module.exports = router;
