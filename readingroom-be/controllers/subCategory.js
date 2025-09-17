@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 //models
 const SubCategory = require('../model/SubCategory');
+const MainCategory = require('../model/MainCategory');
 
 //create a new sub-category
 module.exports.createSubCategory = async (req, res) => {
@@ -64,6 +65,7 @@ module.exports.updateSubCategory = async (req, res) => {
 }
 
 //delete a specific sub-category
+//From the main category, the sub-category should be removed first before deleting the sub-category itself.
 module.exports.deleteSubCategory = async (req, res) => {
     try {
         const {id} = req.params;
@@ -71,11 +73,17 @@ module.exports.deleteSubCategory = async (req, res) => {
         if(!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ error: 'Invalid sub-category ID' });
         }
-        const deleteSubCategory = await SubCategory.findByIdAndDelete(id);
-        if(!deleteSubCategory) {
+        const subCategory = await SubCategory.findById(id);
+        if(!subCategory) {
             return res.status(404).json({ error: 'Sub-category not found' });
         }
-        res.status(200).json({ message: 'Sub-category deleted successfully' });
+        //remove the sub-category from any main-category that references it
+        await MainCategory.updateMany(
+            { SubCategory: id },
+            { $pull: { SubCategory: id } }
+        );
+        await subCategory.deleteOne();
+        res.status(200).json({ message: 'Sub-category deleted successfully and also removed form the Main-category' });
     } catch (error) {
         res.status(500).json({ error: 'Error deleting sub-category', details: error.message });
     }
