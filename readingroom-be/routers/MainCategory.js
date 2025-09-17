@@ -6,5 +6,6 @@ const MainCategory = require("../controllers/mainCategory");
 
 router.post('/', MainCategory.createMainCategory);
 router.get('/all', MainCategory.getAllMainCategories);
+router.put('/:id/addSubCategory', MainCategory.addSubCategoryToMainCategory);
 
 module.exports = router;
