@@ -50,3 +50,21 @@ module.exports.getBookDetails = async (req, res) => {
         res.status(500).json({ error: 'Error fetching book details', details: error.message });
     }
 }
+
+//update book details
+module.exports.updateBook = async (req, res) => {
+    try {
+        const {id} = req.params;
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ error: 'Invalid book ID' });
+        }
+        const { title, author, description, isbn, publishedDate, pages, language, price } = req.body;
+        const book = await Book.findByIdAndUpdate(id, { title, author, description, isbn, publishedDate, pages, language, price }, { new: true });
+        if (!book) {
+            return res.status(404).json({ error: 'Book not found' });
+        }
+        res.status(200).json(book);
+    } catch (error) {
+        res.status(500).json({ error: 'Error updating book details', details: error.message });
+    }
+}
