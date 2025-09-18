@@ -8,6 +8,7 @@ const app = express();
 const badgeRouter = require('./routers/Badge');
 const subCategoryRouter = require('./routers/SubCategory');
 const mainCategoryRouter = require('./routers/MainCategory');
+const bookRouter = require('./routers/book');
 
 app.use(express.json());
 
@@ -23,6 +24,7 @@ app.get("/", (req, res) => {
 app.use('/api/badges', badgeRouter);
 app.use('/api/subcategories', subCategoryRouter);
 app.use('/api/maincategories', mainCategoryRouter);
+app.use('/api/books', bookRouter);
 
 const port = process.env.PORT || 8000;
 
