@@ -11,5 +11,6 @@ router.delete('/:id/delete', bookController.deleteBook);
 router.get('/',bookController.getAllBooks);
 router.put('/:id/addBadgesToBook', bookController.addBadgesToBook);
 router.put('/:id/removeBadgesFromBook', bookController.removeBadgesFromBook);
+router.put('/:id/changeBookCategory', bookController.changeBookCategory)
 
 module.exports = router;

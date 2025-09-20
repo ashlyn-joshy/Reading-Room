@@ -151,3 +151,42 @@ module.exports.removeBadgesFromBook = async (req, res) => {
         res.status(500).json({ error: 'Error removing badges from book', details: error.message });
     }
 }
+
+//change sub-category or main-category of a book
+module.exports.changeBookCategory = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const { subCategoryId, mainCategoryId } = req.body;
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ error: 'Invalid book ID' });
+        }
+        const book = await Book.findById(id);
+        if (!book) {
+            return res.status(404).json({ error: 'Book not found' });
+        }
+        if (subCategoryId) {
+            if (!mongoose.Types.ObjectId.isValid(subCategoryId)) {
+                return res.status(400).json({ error: 'Invalid subCategoryId' });
+            }
+            const subCategory = await SubCategory.findById(subCategoryId);
+            if (!subCategory) {
+                return res.status(400).json({ error: 'Sub-category not found' });
+            }
+            book.subCategory = subCategoryId;
+        }
+        if (mainCategoryId) {
+            if (!mongoose.Types.ObjectId.isValid(mainCategoryId)) {
+                return res.status(400).json({ error: 'Invalid mainCategoryId' });
+            }
+            const mainCategory = await MainCategory.findById(mainCategoryId);
+            if (!mainCategory) {
+                return res.status(400).json({ error: 'Main category not found' });
+            }
+            book.mainCategory = mainCategoryId;
+        }
+        await book.save();
+        res.status(200).json(book);
+    } catch (error) {
+        res.status(500).json({ error: 'Error changing sub-category', details: error.message });
+    }
+}
