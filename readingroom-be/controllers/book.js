@@ -25,6 +25,9 @@ module.exports.createBook = async (req, res) => {
         }
         const book = new Book({ title, author, description, isbn, publishedDate, pages, language, price, badges: badgesId, subCategory: subCategoryId, mainCategory: mainCategoryId });
         await book.save();
+        // Update the Book arrays in SubCategory and MainCategory
+        await SubCategory.findByIdAndUpdate(subCategoryId, { $push: { Book: book._id } });
+        await MainCategory.findByIdAndUpdate(mainCategoryId, { $push: { Book: book._id } });
         res.status(201).json(book);
     } catch (error) {
         res.status(500).json({ error: 'Error creating book', details: error.message });
@@ -80,6 +83,9 @@ module.exports.deleteBook = async (req, res) => {
         if (!book) {
             return res.status(404).json({ error: 'Book not found' });
         }
+        // Remove the book reference from SubCategory and MainCategory
+        await SubCategory.findByIdAndUpdate(book.subCategory, { $pull: { Book: book._id } });
+        await MainCategory.findByIdAndUpdate(book.mainCategory, { $pull: { Book: book._id } });
         res.status(200).json({ message: 'Book deleted successfully' });
     } catch (error) {
         res.status(500).json({ error: 'Error deleting book', details: error.message });
@@ -164,6 +170,7 @@ module.exports.changeBookCategory = async (req, res) => {
         if (!book) {
             return res.status(404).json({ error: 'Book not found' });
         }
+        // Change sub-category and also need to update the Book arrays in SubCategory
         if (subCategoryId) {
             if (!mongoose.Types.ObjectId.isValid(subCategoryId)) {
                 return res.status(400).json({ error: 'Invalid subCategoryId' });
@@ -172,8 +179,13 @@ module.exports.changeBookCategory = async (req, res) => {
             if (!subCategory) {
                 return res.status(400).json({ error: 'Sub-category not found' });
             }
+            // Remove book from old sub-category
+            await SubCategory.findByIdAndUpdate(book.subCategory, { $pull: { Book: book._id } });
+            // Add book to new sub-category
+            await SubCategory.findByIdAndUpdate(subCategoryId, { $push: { Book: book._id } });
             book.subCategory = subCategoryId;
         }
+        // Change main-category and also need to update the Book arrays in MainCategory
         if (mainCategoryId) {
             if (!mongoose.Types.ObjectId.isValid(mainCategoryId)) {
                 return res.status(400).json({ error: 'Invalid mainCategoryId' });
@@ -182,6 +194,10 @@ module.exports.changeBookCategory = async (req, res) => {
             if (!mainCategory) {
                 return res.status(400).json({ error: 'Main category not found' });
             }
+            // Remove book from old main-category
+            await MainCategory.findByIdAndUpdate(book.mainCategory, { $pull: { Book: book._id } });
+            // Add book to new main-category
+            await MainCategory.findByIdAndUpdate(mainCategoryId, { $push: { Book: book._id } });
             book.mainCategory = mainCategoryId;
         }
         await book.save();
