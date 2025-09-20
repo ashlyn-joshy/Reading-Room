@@ -130,3 +130,24 @@ module.exports.addBadgesToBook = async (req, res) => {
         res.status(500).json({ error: 'Error adding badges to book', details: error.message });
     }
 }
+
+//remove badges from a book
+module.exports.removeBadgesFromBook = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const { badgesId } = req.body; // Expecting an array of badge IDs
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ error: 'Invalid book ID' });
+        }
+        const book = await Book.findById(id);
+        if (!book) {
+            return res.status(404).json({ error: 'Book not found' });
+        }
+        // Remove badges
+        book.badges = book.badges.filter(badgeId => !badgesId.includes(badgeId.toString()));
+        await book.save();
+        res.status(200).json(book);
+    } catch (error) {
+        res.status(500).json({ error: 'Error removing badges from book', details: error.message });
+    }
+}
