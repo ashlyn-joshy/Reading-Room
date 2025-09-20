@@ -8,6 +8,7 @@ router.post('/', bookController.createBook);
 router.get('/:id', bookController.getBookDetails);
 router.put('/:id/update', bookController.updateBook);
 router.delete('/:id/delete', bookController.deleteBook);
-router.get('/',bookController.getAllBooks)
+router.get('/',bookController.getAllBooks);
+router.put('/:id/addBadgesToBook', bookController.addBadgesToBook);
 
 module.exports = router;

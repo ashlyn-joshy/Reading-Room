@@ -98,3 +98,35 @@ module.exports.getAllBooks = async (req, res) => {
         res.status(500).json({ error: 'Error fetching books', details: error.message });
     }
 }
+
+//Add badges to a book
+module.exports.addBadgesToBook = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const { badgesId } = req.body; // Expecting an array of badge IDs
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ error: 'Invalid book ID' });
+        }
+        const book = await Book.findById(id);
+        if (!book) {
+            return res.status(404).json({ error: 'Book not found' });
+        }
+        // Validate badge IDs
+        for (const badgeId of badgesId) {
+            if (!mongoose.Types.ObjectId.isValid(badgeId)) {
+                return res.status(400).json({ error: `Invalid badge ID: ${badgeId}` });
+            }
+            const badge = await Badge.findById(badgeId);
+            if (!badge) {
+                return res.status(400).json({ error: `Badge not found: ${badgeId}` });
+            }
+            if (!book.badges.includes(badgeId)) {
+                book.badges.push(badgeId);
+            }
+        }
+        await book.save();
+        res.status(200).json(book);
+    } catch (error) {
+        res.status(500).json({ error: 'Error adding badges to book', details: error.message });
+    }
+}
