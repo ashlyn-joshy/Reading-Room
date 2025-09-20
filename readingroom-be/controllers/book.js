@@ -85,3 +85,16 @@ module.exports.deleteBook = async (req, res) => {
         res.status(500).json({ error: 'Error deleting book', details: error.message });
     }
 }
+
+//display all books
+module.exports.getAllBooks = async (req, res) => {
+    try {
+        const books = await Book.find()
+            .populate('badges')
+            .populate('subCategory')
+            .populate('mainCategory');
+        res.status(200).json(books);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching books', details: error.message });
+    }
+}
