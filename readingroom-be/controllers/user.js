@@ -33,3 +33,13 @@ module.exports.getUserDetails = async (req, res) => {
         res.status(500).json({ message: 'Error in fetching user details', error: error.message });
     }
 }
+
+//get all users - role : users only
+module.exports.getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find().select('-password').where('role').equals('user');
+        res.status(200).json({ users });
+    } catch (error) {
+       res.status(500).json({ message: 'Error in fetching users', error: error.message }); 
+    }
+}
