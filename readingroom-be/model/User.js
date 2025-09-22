@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const {Schema} =  mongoose;
+const bcrypt = require('bcrypt');
 
 const userSchema = new Schema({
     username: { type: String, required: true, unique: true },
@@ -14,7 +15,9 @@ userSchema.statics.register = async function(username, email, password) {
     if(existingUser) {
         throw new Error('Username or email already exists');
     }
-    const user = new this({ username, email, password });
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const user = new this({ username, email, password: hashedPassword });
     await user.save();
     return user;
 }
