@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const {Schema} =  mongoose;
 const bcrypt = require('bcrypt');
+const validator = require('validator');
 
 const userSchema = new Schema({
     username: { type: String, required: true, unique: true },
@@ -17,6 +18,12 @@ userSchema.statics.register = async function(username, email, password) {
     }
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
+    if(!validator.isStrongPassword(password)) {
+        throw new Error('Password is not strong enough. It should be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.');
+    }
+    if(!validator.isEmail(email)) {
+        throw new Error('Email is not valid');
+    }
     const user = new this({ username, email, password: hashedPassword });
     await user.save();
     return user;
