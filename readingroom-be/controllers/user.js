@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
+const { transporter } = require("../config/nodemailer");
+const { welcomeEmail } = require("../Emails/welcomeEmail");
+
 //models
 const User = require("../model/User");
 
@@ -21,6 +24,15 @@ module.exports.registerNewUser = async (req, res) => {
       secure: true,
       maxAge: 3 * 24 * 60 * 60 * 1000,
     });
+
+    //send email notification
+    try {
+      await transporter.sendMail(welcomeEmail(newUser.username, newUser.email));
+      console.log("Welcome email sent to:", newUser.email);
+    } catch (emailError) {
+      console.error("Failed to send welcome email:", emailError.message);
+    }
+
     res.status(201).json({
       email: newUser.email,
       token: token,
