@@ -20,6 +20,17 @@ module.exports.registerNewUser = async (req, res) => {
     }
 }
 
+//user login
+module.exports.userLogin = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await User.login(email, password);
+        res.status(200).json({ message: "user login", email: user.email, token: createToken(user._id) });
+    } catch (error) {
+        res.status(500).json({ message: 'Error in user login', error: error.message });
+    }
+}
+
 //get user details 
 module.exports.getUserDetails = async (req, res) => {
     try {

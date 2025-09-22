@@ -10,6 +10,19 @@ const userSchema = new Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
+//static method for login
+userSchema.statics.login = async function(email, password) {
+    const user = await this.findOne({ email });
+    if(user){
+        const auth = await bcrypt.compare(password, user.password);
+        if(auth) {
+            return user;
+        }
+        throw Error('Incorrect password');
+    }
+    throw Error('Incorrect email');
+}
+
 //static method for the user register 
 userSchema.statics.register = async function(username, email, password) {
     const existingUser = await this.findOne({ $or: [{ username }, { email }] });
