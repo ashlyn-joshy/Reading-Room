@@ -8,4 +8,15 @@ const userSchema = new Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
+//static method for the user register 
+userSchema.statics.register = async function(username, email, password) {
+    const existingUser = await this.findOne({ $or: [{ username }, { email }] });
+    if(existingUser) {
+        throw new Error('Username or email already exists');
+    }
+    const user = new this({ username, email, password });
+    await user.save();
+    return user;
+}
+
 module.exports = mongoose.model('User', userSchema);
