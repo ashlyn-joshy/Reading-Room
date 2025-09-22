@@ -6,13 +6,13 @@ const User = require('../model/User');
 //create new user
 module.exports.createUser = async (req, res) => {
     try {
-        const { username, email, password, role } = req.body;
+        const { username, email, password } = req.body;
         //check if user already exists
         const existingUser = await User.findOne({ $or: [{ username }, { email }] });
         if(existingUser) {
             return res.status(400).json({ message: 'Username or email already exists' });
         }
-        const newUser = new User({ username, email, password, role });
+        const newUser = new User({ username, email, password });
         await newUser.save();
         res.status(201).json({ message: 'User created successfully', user: newUser });
     } catch (error) {
@@ -34,23 +34,13 @@ module.exports.getUserDetails = async (req, res) => {
     }
 }
 
-//get all users - role : users only
+//get all users
 module.exports.getAllUsers = async (req, res) => {
     try {
-        const users = await User.find().select('-password').where('role').equals('user');
+        const users = await User.find().select('-password');
         res.status(200).json({ users });
     } catch (error) {
        res.status(500).json({ message: 'Error in fetching users', error: error.message }); 
-    }
-}
-
-//get all admins - role : admins only
-module.exports.getAllAdmins = async (req, res) => {
-    try {
-        const admins = await User.find({role: 'admin'}).select('-password');
-        res.status(200).json({ admins });
-    } catch (error) {
-        res.status(500).json({ message: 'Error in fetching admins', error: error.message });
     }
 }
 
