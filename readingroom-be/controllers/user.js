@@ -1,14 +1,20 @@
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 
 //models
 const User = require('../model/User');
+
+//create token
+const createToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '3d' });
+}
 
 //create new user
 module.exports.registerNewUser = async (req, res) => {
     try {
         const { username, email, password } = req.body;
         const newUser = await User.register(username, email, password);
-        res.status(201).json({ message: 'User created successfully', newUser});
+        res.status(201).json({ email : newUser.email, token: createToken(newUser._id) });
     } catch (error) {
         res.status(500).json({ message: 'Error in creating new user', error: error.message });
     }
