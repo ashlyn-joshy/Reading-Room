@@ -6,6 +6,7 @@ const { welcomeEmail } = require("../Emails/welcomeEmail");
 
 //models
 const User = require("../model/User");
+const { LoginEmail } = require("../Emails/loginEmail");
 
 //create token
 const createToken = (id) => {
@@ -28,7 +29,6 @@ module.exports.registerNewUser = async (req, res) => {
     //send email notification
     try {
       await transporter.sendMail(welcomeEmail(newUser.username, newUser.email));
-      console.log("Welcome email sent to:", newUser.email);
     } catch (emailError) {
       console.error("Failed to send welcome email:", emailError.message);
     }
@@ -57,6 +57,12 @@ module.exports.userLogin = async (req, res) => {
       secure: true,
       maxAge: 3 * 24 * 60 * 60 * 1000,
     });
+    //send mail notification
+    try {
+      await transporter.sendMail(LoginEmail(user.username, user.email));
+    } catch (emailError) {
+      console.error("Failed to send login notification email:", emailError.message);
+    }
     res.status(200).json({
       message: "user login",
       email: user.email,
