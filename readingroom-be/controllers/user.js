@@ -3,10 +3,10 @@ const jwt = require("jsonwebtoken");
 
 const { transporter } = require("../config/nodemailer");
 const { welcomeEmail } = require("../Emails/welcomeEmail");
+const { LoginEmail } = require("../Emails/loginEmail");
 
 //models
 const User = require("../model/User");
-const { LoginEmail } = require("../Emails/loginEmail");
 
 //create token
 const createToken = (id) => {
@@ -61,7 +61,10 @@ module.exports.userLogin = async (req, res) => {
     try {
       await transporter.sendMail(LoginEmail(user.username, user.email));
     } catch (emailError) {
-      console.error("Failed to send login notification email:", emailError.message);
+      console.error(
+        "Failed to send login notification email:",
+        emailError.message
+      );
     }
     res.status(200).json({
       message: "user login",
