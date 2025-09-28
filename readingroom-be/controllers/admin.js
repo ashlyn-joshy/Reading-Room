@@ -36,3 +36,26 @@ module.exports.registerAdmin = async (req, res) => {
       .json({ message: "Failed to register admin", error: error.message });
   }
 };
+
+//admin login
+module.exports.adminLogin = async (req, res) => {
+  try {
+    const { adminEmail, adminPassword } = req.body;
+    const admin = await Admin.login(adminEmail, adminPassword);
+    const token = createToken(admin._id);
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 3 * 24 * 60 * 60 * 1000,
+    });
+    res.status(200).json({
+      email: admin.adminEmail,
+      token: token,
+      message: "Login as admin",
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to login as admin", error: error.message });
+  }
+};

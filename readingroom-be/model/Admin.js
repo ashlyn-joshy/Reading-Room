@@ -42,4 +42,17 @@ adminSchema.statics.adminRegister = async function (
   return admin;
 };
 
+//static function to login
+adminSchema.statics.login = async function (adminEmail, adminPassword) {
+  const admin = await this.findOne({ adminEmail });
+  if (admin) {
+    const auth = await bcrypt.compare(adminPassword, admin.adminPassword);
+    if (auth) {
+      return admin;
+    }
+    throw new Error("Incorrect Password");
+  }
+  throw new Error("Incorrect Email");
+};
+
 module.exports = mongoose.model("Admin", adminSchema);
