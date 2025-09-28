@@ -71,3 +71,23 @@ module.exports.alladmin = async (req, res) => {
       .json({ message: "Failed to show all admins", error: error.message });
   }
 };
+
+//get details of a admin
+module.exports.adminDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid id format" });
+    }
+    const admin = await Admin.findById(id).select("-adminPassword");
+    if (!admin) {
+      throw new Error("Admin is not found");
+    }
+    res.status(200).json({ admin });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to get the infromation of admin",
+      error: error.message,
+    });
+  }
+};
