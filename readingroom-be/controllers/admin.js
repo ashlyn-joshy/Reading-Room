@@ -59,3 +59,15 @@ module.exports.adminLogin = async (req, res) => {
       .json({ message: "Failed to login as admin", error: error.message });
   }
 };
+
+//show all admin
+module.exports.alladmin = async (req, res) => {
+  try {
+    const allAdmins = await Admin.find().select("-adminPassword");
+    res.status(200).json({ allAdmins });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to show all admins", error: error.message });
+  }
+};
