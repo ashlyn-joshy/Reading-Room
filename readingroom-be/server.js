@@ -10,6 +10,7 @@ const subCategoryRouter = require("./routers/SubCategory");
 const mainCategoryRouter = require("./routers/MainCategory");
 const bookRouter = require("./routers/book");
 const userRouter = require("./routers/user");
+const adminRouter = require("./routers/admin");
 
 app.use(express.json());
 
@@ -30,6 +31,7 @@ app.use("/api/subcategories", subCategoryRouter);
 app.use("/api/maincategories", mainCategoryRouter);
 app.use("/api/books", bookRouter);
 app.use("/api/users", userRouter);
+app.use("/api/admin", adminRouter);
 
 const port = process.env.PORT || 8000;
 
