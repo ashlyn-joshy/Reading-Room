@@ -91,3 +91,20 @@ module.exports.adminDetails = async (req, res) => {
     });
   }
 };
+
+//delet admin
+module.exports.deleteAdmin = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid Id format" });
+    }
+    const admin = await Admin.findByIdAndDelete(id);
+    res.status(200).json({ message: "admin is deleted" });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to delete admin",
+      error: error.message,
+    });
+  }
+};
