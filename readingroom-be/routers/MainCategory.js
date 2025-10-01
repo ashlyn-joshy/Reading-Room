@@ -3,13 +3,16 @@ const router = express.Router();
 
 //controllers
 const MainCategory = require("../controllers/mainCategory");
+//Authentication
+const adminAuth = require("../middleware/adminAuth");
 
-router.post('/', MainCategory.createMainCategory);
 router.get('/all', MainCategory.getAllMainCategories);
-router.put('/:id/addSubCategory', MainCategory.addSubCategoryToMainCategory);
-router.put('/:id/removeSubCategory', MainCategory.removeSubCategoryFromMainCategory);
-router.delete('/:id/delete', MainCategory.deleteMainCategory);
 router.get('/:id', MainCategory.getMainCategoryDetails);
-router.put('/:id/update', MainCategory.updateMainCategory);
+
+router.post('/', adminAuth, MainCategory.createMainCategory);
+router.put('/:id/addSubCategory', adminAuth,MainCategory.addSubCategoryToMainCategory);
+router.put('/:id/removeSubCategory',adminAuth, MainCategory.removeSubCategoryFromMainCategory);
+router.delete('/:id/delete',adminAuth, MainCategory.deleteMainCategory);
+router.put('/:id/update',adminAuth, MainCategory.updateMainCategory);
 
 module.exports = router;
