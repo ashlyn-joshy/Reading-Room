@@ -9,5 +9,6 @@ router.post("/login", adminController.adminLogin);
 router.get("/alladmins", adminController.alladmin);
 router.get("/:id", adminController.adminDetails);
 router.delete("/:id/delete", adminController.deleteAdmin);
+router.post("/logout", adminController.adminLogout);
 
 module.exports = router;

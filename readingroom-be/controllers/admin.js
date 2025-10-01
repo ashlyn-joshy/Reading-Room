@@ -108,3 +108,19 @@ module.exports.deleteAdmin = async (req, res) => {
     });
   }
 };
+
+//admin logout
+module.exports.adminLogout = async (req, res) => {
+  try {
+    // Clear the JWT cookie
+    res.clearCookie("jwt", {
+      httpOnly: true,
+      secure: true,
+    });
+    res.status(200).json({ message: "Admin is logout" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to logout admin", error: error.message });
+  }
+};
