@@ -2,8 +2,10 @@ const express = require("express");
 require("dotenv").config();
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
+var cors = require('cors');
 
 const app = express();
+app.use(cors());
 
 //routers
 const badgeRouter = require("./routers/Badge");
