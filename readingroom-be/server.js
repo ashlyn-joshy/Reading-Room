@@ -5,7 +5,12 @@ const cookieParser = require("cookie-parser");
 var cors = require('cors');
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
 //routers
 const badgeRouter = require("./routers/Badge");
