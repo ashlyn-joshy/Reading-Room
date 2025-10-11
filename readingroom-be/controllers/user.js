@@ -10,7 +10,9 @@ const User = require("../model/User");
 
 //create token
 const createToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "3d" });
+  return jwt.sign({ id, isUser: true }, process.env.JWT_SECRET, {
+    expiresIn: "3d",
+  });
 };
 
 //create new user
